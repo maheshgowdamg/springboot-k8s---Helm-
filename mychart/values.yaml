@@ -5,7 +5,7 @@ app:
     app: myapp
   name: springapp
   image:
-    repository: springapp
+    repository: springapphelm
     tag: latest
     pullPolicy: Never
   port: 9000
@@ -35,8 +35,15 @@ postgres:
   service:
     type: NodePort
     nodePort: 30081
+
+
+persistence:
   storage: 1Gi
-  volumePath: /run/desktop/mnt/host/c/helm/data
+  path: /run/desktop/mnt/host/c/helm/data
+  accessModes: ReadWriteOnce
+  reclaimPolicy: Retain
+
+  volumeMode: Filesystem
 
 
   

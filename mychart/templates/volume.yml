@@ -5,12 +5,12 @@ metadata:
   name: {{ .Release.Name }}-postgres-pv
 spec:
   capacity:
-    storage: {{ .Values.postgres.storage }}
+    storage: {{ .Values.persistence.storage }}
   accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
+    - {{ .Values.persistence.accessModes }}
+  persistentVolumeReclaimPolicy: {{ .Values.persistence.reclaimPolicy }}
   hostPath:
-    path: {{ .Values.postgres.volumePath }}
+    path: {{ .Values.persistence.path }}
   storageClassName: ""
 
 ---
@@ -21,10 +21,10 @@ metadata:
 spec:
   resources:
     requests:
-      storage: {{ .Values.postgres.storage }}
-  volumeMode: Filesystem
+      storage: {{ .Values.persistence.storage }}
+  volumeMode: {{ .Values.persistence.volumeMode }}
   accessModes:
-    - ReadWriteOnce
+    - {{ .Values.persistence.accessModes }}
   storageClassName: ""
 
 
