@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1 
+kind: Deployment 
+metadata:
+  name: {{ .Release.Name }}-deploy 
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.app.labels.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.labels.app }}
+    spec:
+      containers:
+       - name: {{ .Values.app.name }}
+         image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag }}"
+         ports:
+           - containerPort: {{ .Values.app.port }}
+         imagePullPolicy: {{ .Values.app.image.pullPolicy }}
+         env:
+           - name: {{ .Values.app.db.name }}
+             value: jdbc:postgresql://{{ .Release.Name }}-{{ .Values.app.db.host }}:{{ .Values.app.db.port }}/{{ .Values.app.db.database }}
+           - name: spring.datasource.username
+             value: {{ .Values.postgres.db.user }}
+           - name: spring.datasource.password
+             value: {{ .Values.postgres.db.password }}
+---
+apiVersion: v1 
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-mysvc
+spec:
+  selector:
+    app: {{ .Values.app.labels.app }}
+  ports:
+  - port: {{ .Values.app.port }}
+    targetPort: {{ .Values.app.port }}
+    nodePort: {{ .Values.app.service.nodePort }}
+  type: {{ .Values.app.service.type }}

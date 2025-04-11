@@ -1,0 +1,4 @@
+apiVersion: v2
+name: mychart
+description: Spring Boot app with PostgreSQL and persistence
+version: 0.1.0

@@ -1,0 +1,42 @@
+replicaCount: 1
+
+app:
+  labels:
+    app: myapp
+  name: springapp
+  image:
+    repository: springapp
+    tag: latest
+    pullPolicy: Never
+  port: 9000
+
+  db:
+    name: SPRING_DATASOURCE_URL
+    host: postgres
+    port: 5432
+    database: mydatabase
+    username: postgres
+    password: root
+
+  service:
+    type: NodePort
+    nodePort: 30080
+
+postgres:
+  name: postgres
+  image:
+    repository: postgres
+    tag: "15"
+  port: 5432
+  db:
+    dbName: mydatabase
+    user: postgres
+    password: root
+  service:
+    type: NodePort
+    nodePort: 30081
+  storage: 1Gi
+  volumePath: /run/desktop/mnt/host/c/helm/data
+
+
+  
